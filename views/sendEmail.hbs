@@ -1,0 +1,12 @@
+<div style="height: 15vh; width: 60vw; margin: auto; background: lightblue;padding: 20px">
+    <h2>Enter recipient email-address and mail body</h2>
+    <form action="/deliverEmail" method="post">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" size="40" placeholder="Enter your email">
+
+        <label for="message">Message</label>
+        <textarea  name="message" id="message" cols="50" placeholder="Enter your message here"></textarea>
+
+        <button type="submit" style="float: right">Send Email</button>
+    </form>
+</div>

@@ -1,0 +1,6 @@
+<div style="margin-left: 40%; margin-bottom: 10%">
+    <h1>Files uploaded</h1>
+    {{#each files}}
+        <h3>File name: {{this}} &nbsp; <a href="/getFile/{{this}}">Click to download</a></h3>
+    {{/each}}
+</div>
