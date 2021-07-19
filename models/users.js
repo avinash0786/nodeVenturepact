@@ -1,17 +1,20 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
-var userSchema=mongoose.Schema({
-    name:{
-        type:String,
-        required:true
+var userSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    age:{
-        type:Number,
+    email: {
+      type: String,
     },
-    address:{
-        type:String
-    }
-},{ collection : 'users' });
+    profileImage: {
+      type: String,
+    },
+  },
+  { collection: "users" }
+);
 
 // Compile model from schema
-module.exports=mongoose.model('users',userSchema);
+module.exports = mongoose.model("users", userSchema);
