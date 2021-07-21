@@ -67,4 +67,10 @@ router.get("/getSession", (req, res) => {
   console.log(req.session.id);
   res.json(req.session);
 });
+
+router.get("/getHeader", (req, res) => {
+  console.log("Getting auth header");
+  console.log("Cookies: ", req.cookies);
+  res.send(req.cookies);
+});
 module.exports = router;

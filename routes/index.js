@@ -53,6 +53,17 @@ router.post("/deliverEmail", MainController.deliverEmail);
 
 router.get("/listEmails", MainController.listEmails);
 
+router.get("/setHeader", (req, res) => {
+  console.log("Setting auth header");
+  res.cookie("mySecretToken", "xxx-ssaa-sa1sa-as");
+  res.set("Authorization", "my auth key");
+  res.send("Set header success");
+});
+router.get("/getHeader", (req, res) => {
+  console.log("Getting auth header");
+  console.log("Cookies: ", req.cookies);
+  res.send(req.cookies);
+});
 module.exports = router;
 //openid profile email
 // https://developers.google.com/oauthplayground

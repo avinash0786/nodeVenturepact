@@ -47,4 +47,9 @@ router.get("/logout",((req, res) => {
     res.redirect('/');
 }))
 
+router.get('/checkSession',((req, res) => {
+    console.log("Check session call")
+    console.log(req.user)
+    res.json(req.user)
+}))
 module.exports=router;
