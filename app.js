@@ -10,6 +10,7 @@ var expHbs = require("express-handlebars");
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var oAuthRoute = require("./routes/oAuth");
+var secureRoute = require("./routes/secure");
 const MongoStore = require("connect-mongo");
 var compression = require("compression");
 require("./services/databaseConn");
@@ -54,6 +55,16 @@ app.use(express.urlencoded({ extended: false }));
 //serving static files
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200"); // update to match the domain you will make the request from
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 // app.use(
 //   session({
 //     name: "Node-vent",
@@ -86,6 +97,7 @@ app.use(passport.session());
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
 app.use("/oauth", oAuthRoute);
+app.use("/secure", secureRoute);
 
 app.get("/setSession", (req, res) => {
   console.log("Setting session in root");
