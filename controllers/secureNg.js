@@ -80,7 +80,13 @@ exports.loginUser = function (req, res) {
             }
           );
         }
-
+        //password not match
+        else {
+          return res.status(401).json({
+            status: false,
+            info: "Authentication failed !",
+          });
+        }
         if (err) {
           return res.status(404).json({
             status: false,
@@ -154,7 +160,7 @@ exports.profile = function (req, res) {
         .then((data) => {
           console.log(data);
           if (data == null) {
-            return res.status(200).json({
+            return res.status(404).json({
               userFound: false,
               status: false,
               info: "User NOT FOUND ",
@@ -177,6 +183,81 @@ exports.profile = function (req, res) {
             info: "User FOUND ERROR",
           });
         });
+    }
+  });
+};
+
+exports.updateProfile = function (req, res) {
+  console.log(req.body);
+  if (req["cookies"]["auth"] === undefined) {
+    return res.status(404).json({
+      status: false,
+      message: "Auth token not available",
+    });
+  }
+
+  jwt.verify(req["cookies"]["auth"], "mysecretKey", (err, authData) => {
+    if (err) {
+      console.log(err);
+      res.status(404).json({
+        status: false,
+        message: "Auth token not available",
+      });
+    } else {
+      console.log(authData);
+      console.log(String(authData.userId));
+      //hashing the password
+      bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(req.body.pswd, salt, function (err, hash) {
+          console.log("pswd hashed");
+          if (err) {
+            console.log(err);
+            res.status(400).end();
+          } else {
+            console.log("Running hash OK");
+            ngUser
+              .updateOne(
+                { userName: authData.userId },
+                {
+                  fname: req.body.fname,
+                  lname: req.body.lname,
+                  userName: req.body.userName,
+                  email: req.body.email,
+                  pswd: hash,
+                },
+                { new: true }
+              )
+              .then((dta) => {
+                console.log(dta);
+                //now we need to set new cookie and new auth key, bcoz user name is changed
+                jwt.sign(
+                  { userId: req.body.userName },
+                  "mysecretKey",
+                  (err, token) => {
+                    res.cookie("auth", token, {
+                      maxAge: 24 * 60 * 60 * 1000,
+                      secure: true,
+                      httpOnly: false,
+                    });
+
+                    res.status(200).json({
+                      jwt: token,
+                      info: "Jwt signed and sent to client",
+                      status: true,
+                    });
+                  }
+                );
+              })
+              .catch((error) => {
+                res.status(404).json({
+                  status: false,
+                  message: "Error updating user",
+                  err: error,
+                });
+              });
+          }
+        });
+      });
     }
   });
 };
