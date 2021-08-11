@@ -56,7 +56,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200"); // update to match the domain you will make the request from
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://nodevent.herokuapp.com/"
+  ); // update to match the domain you will make the request from
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
     "Access-Control-Allow-Headers",
